@@ -1,4 +1,4 @@
-package negocio; //hola
+package negocio;
 
 import negocio.grafos.Grafo;
 import negocio.grafos.Provincia;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class SistemaRegiones {
     private Grafo grafo;
-    private Grafo grafoResultante; //Para guardar el árbol después de Prim
+    private Grafo grafoResultante; // Para guardar el árbol después de Prim
     private Map<Integer, Provincia> mapaProvincias;
 
     public SistemaRegiones() {
