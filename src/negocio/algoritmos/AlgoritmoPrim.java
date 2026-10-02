@@ -5,7 +5,6 @@ import negocio.grafos.Grafo;
 import java.util.ArrayList;
 import java.util.List;
 
-
 //implementacion de Prim con arreglo simple y matris de adyacencia 
 public class AlgoritmoPrim {
     

@@ -90,7 +90,7 @@ public class AlgoritmoPrimTest {
         List<Arista> agm = AlgoritmoPrim.ejecutar(g);
         
         assertEquals(4, agm.size());
-        // El árbol óptimo es: 0-1 (10), 0-2 (20), 2-3 (20), 3-4 (10). Total = 60.
+        // El arbol optimo es: 0-1 (10), 0-2 (20), 2-3 (20), 3-4 (10). Total = 60.
         assertEquals(60, calcularPesoTotal(agm));
     }
 

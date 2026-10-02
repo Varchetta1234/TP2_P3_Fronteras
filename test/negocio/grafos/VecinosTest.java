@@ -3,8 +3,8 @@ package negocio.grafos;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class VecinosTest
-{
+public class VecinosTest{
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void verticeNegativoTest()
 	{
@@ -16,7 +16,7 @@ public class VecinosTest
 	public void verticeExcedidoTest()
 	{
 		Grafo grafo = new Grafo(5);
-		grafo.vecinos(5); // El grafo de tamaño 5 tiene vértices del 0 al 4
+		grafo.vecinos(5); // El grafo de tamaño 5 tiene vertices del 0 al 4
 	}
 
 	@Test

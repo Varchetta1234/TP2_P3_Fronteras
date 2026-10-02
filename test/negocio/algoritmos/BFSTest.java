@@ -36,7 +36,7 @@ public class BFSTest
 	public void grafoDosVerticesConexoTest() 
 	{
 		Grafo g = new Grafo(2);
-		g.agregarArista(0, 1, 1); // Este ya estaba bien
+		g.agregarArista(0, 1, 1); 
 		assertTrue(BFS.esConexo(g));
 	}
 	
@@ -60,7 +60,7 @@ public class BFSTest
 		Grafo g = inicializarGrafoCompleto();
 		
 		int[] esperado = {0, 1, 2, 3};
-		AssertAuxiliar.iguales(esperado, BFS.alcanzables(g, 0)); // Corregido a AssertAuxiliar
+		AssertAuxiliar.iguales(esperado, BFS.alcanzables(g, 0)); 
 	}
 	
 	@Test

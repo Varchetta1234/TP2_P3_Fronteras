@@ -17,6 +17,7 @@ import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.DefaultMapController;
 
+
 public class VentanaPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -36,7 +37,8 @@ public class VentanaPrincipal extends JFrame {
         public void paint(Graphics g, Point position, int radio) {
             if (g != null && position != null) {
                 g.setColor(Color.BLACK);
-                g.setFont(new Font("Arial", Font.BOLD, 12));
+                // Aumentamos el tamaño a 16 para que se vea más grande y grueso
+                g.setFont(new Font("Arial", Font.BOLD, 16)); 
                 g.drawString(getName(), position.x, position.y);
             }
         }
@@ -51,7 +53,7 @@ public class VentanaPrincipal extends JFrame {
 
         setTitle("Diseño de Regiones - TP2");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Agrandamos la ventana significativamente
+        //tamanio ventana:
         setBounds(50, 50, 1150, 750);
         
         JMenuBar menuBar = new JMenuBar();
@@ -113,7 +115,7 @@ public class VentanaPrincipal extends JFrame {
         cmbDestino.setBounds(350, 28, 140, 22);
         panelDatos.add(cmbDestino);
 
-        textPeso = new JTextField("0.0");
+        textPeso = new JTextField("0");
         textPeso.setBounds(500, 29, 40, 30);
         panelDatos.add(textPeso);
 
@@ -151,7 +153,7 @@ public class VentanaPrincipal extends JFrame {
             actualizarMapa(null, sistema.getGrafo());
         });
 
-     // Evento Agregar Arista Manual
+        // Evento Agregar Arista Manual
         btnAgregar.addActionListener(e -> {
             try {
                 int origen = cmbOrigen.getSelectedIndex();
@@ -160,12 +162,12 @@ public class VentanaPrincipal extends JFrame {
 
                 if (origen == destino) {
                     JOptionPane.showMessageDialog(this, "No se permiten bucles: el origen y el destino deben ser distintos.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return; // Cortamos la ejecución acá
+                    return; // Cortamos la ejecucion aca
                 }
                 
                 if (peso <= 0) {
                     JOptionPane.showMessageDialog(this, "El peso debe ser un número entero mayor a 0.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return; // Cortamos la ejecución acá
+                    return; // Cortamos la ejecucion aca
                 }
 
                 sistema.registrarFrontera(origen, destino, peso);
@@ -199,7 +201,7 @@ public class VentanaPrincipal extends JFrame {
             }
         });
 
-        // --- Tablas y Mapa (Agrandados) ---
+        // Tablas y Mapa 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBounds(10, 98, 300, 580);
         contentPane.add(scrollPane);
@@ -227,14 +229,12 @@ public class VentanaPrincipal extends JFrame {
         
         Color[] colores = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW, Color.PINK};
         
-        // Dibujar Vértices
+     // Dibujar Vértices
         if (regiones == null) {
             for (int i = 0; i < 24; i++) {
                 Provincia p = sistema.obtenerProvincia(i);
                 if (p != null) {
-                    MapMarkerDot marcador = new MapMarkerDot(p.getNombre(), new Coordinate(p.getLat(), p.getLon()));
-                    marcador.setBackColor(Color.BLACK);
-                    mapViewer.addMapMarker(marcador);
+                    mapViewer.addMapMarker(crearMarcadorProvincia(p, Color.BLACK));
                 }
             }
         } else {
@@ -242,16 +242,14 @@ public class VentanaPrincipal extends JFrame {
                 Color colorRegion = colores[i % colores.length];
                 for (Integer idProvincia : regiones.get(i)) {
                     Provincia p = sistema.obtenerProvincia(idProvincia);
-                    if(p != null) {
-                        MapMarkerDot marcador = new MapMarkerDot(p.getNombre(), new Coordinate(p.getLat(), p.getLon()));
-                        marcador.setBackColor(colorRegion);
-                        mapViewer.addMapMarker(marcador);
+                    if (p != null) {
+                        mapViewer.addMapMarker(crearMarcadorProvincia(p, colorRegion));
                     }
                 }
             }
         }
         
-        // Dibujar Aristas y Textos de Peso
+        // Dibujar Aristas
         if (grafoAdibujar != null) {
             for (int i = 0; i < grafoAdibujar.tamano(); i++) {
                 for (int j = i + 1; j < grafoAdibujar.tamano(); j++) {
@@ -266,17 +264,28 @@ public class VentanaPrincipal extends JFrame {
                             MapPolygonImpl linea = new MapPolygonImpl(Arrays.asList(c1, c2, c1));
                             linea.setColor(regiones == null ? Color.GRAY : Color.BLACK);
                             mapViewer.addMapPolygon(linea);
-
-                            // Mostrar el peso numérico en el centro de la línea
-                            double peso = grafoAdibujar.pesoArista(i, j); // Ajusta el método si en tu Grafo se llama distinto
-                            Coordinate cMedio = new Coordinate((p1.getLat() + p2.getLat()) / 2, (p1.getLon() + p2.getLon()) / 2);
-                            mapViewer.addMapMarker(new MarcadorTexto(cMedio, String.format("%.2f", peso)));
                         }
                     }
                 }
             }
         }
-        
-        mapViewer.setDisplayToFitMapMarkers();
+        mapViewer.setDisplayPosition(new Coordinate(-43.0, -64.0), 4);
     }
+    
+    private MapMarkerDot crearMarcadorProvincia(Provincia p, Color colorFondo) {
+        String etiqueta = p.getNombre().equalsIgnoreCase("Islas Malvinas") ? "Las Malvinas son Argentinas!!!" : "";
+        
+        MapMarkerDot marcador = new MapMarkerDot(etiqueta, new Coordinate(p.getLat(), p.getLon())) {
+            @Override
+            public void paint(Graphics g, Point position, int radio) {
+                if (g != null) {
+                    g.setFont(new Font("Arial", Font.BOLD, 20)); 
+                }
+                super.paint(g, position, radio);
+            }
+        };
+        marcador.setBackColor(colorFondo);
+        return marcador;
+    }
+    
 }

@@ -23,6 +23,7 @@ public class Arista implements Comparable<Arista> {
         return peso;
     }
 
+    //comparamos por peso
     @Override
     public int compareTo(Arista otra) {
         return Integer.compare(this.peso, otra.peso);

@@ -10,13 +10,13 @@ import java.util.Map;
 
 public class SistemaRegiones {
     private Grafo grafo;
-    private Grafo grafoResultante; // Para guardar el árbol después de Prim
+    private Grafo grafoResultante; // Para guardar el arbol despues de Prim
     private Map<Integer, Provincia> mapaProvincias;
 
     public SistemaRegiones() {
         this.mapaProvincias = new HashMap<>(); 
         try {
-            this.grafo = CargadorDeDatos.cargarDesdeArchivo("provincias.json", 0.5, this); 
+            this.grafo = CargadorDeDatos.cargarDesdeArchivo("provincias.json", this); 
         } catch (Exception e) {
             e.printStackTrace();
             this.grafo = new Grafo(24);
@@ -36,11 +36,10 @@ public class SistemaRegiones {
             throw new IllegalArgumentException("Cantidad de regiones K invalida");
         }
         
-        // 1. Obtener y guardar el grafo (bosque) resultante con las aristas ya eliminadas.
-        
+        // 1. Obtener y guardar el grafo (bosque) resultante con las aristas ya eliminadas
         this.grafoResultante = EliminaAristas.obtenerArbolConKRegiones(this.grafo, k);
         
-        // 2. Extraer las componentes conexas a partir de ese grafo resultante.
+        // 2. Extraer las componentes conexas a partir de ese grafo resultante
         return EliminaAristas.encontrarRegiones(this.grafoResultante, k);
     }
 
@@ -66,7 +65,7 @@ public class SistemaRegiones {
     
     public void recargarDesdeJSON() {
         try {
-            this.grafo = CargadorDeDatos.cargarDesdeArchivo("provincias.json", 0.5, this); 
+            this.grafo = CargadorDeDatos.cargarDesdeArchivo("provincias.json", this); 
         } catch (Exception e) {
             e.printStackTrace();
         }

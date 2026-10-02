@@ -7,7 +7,7 @@ import java.io.FileReader;
 
 public class CargadorDeDatos {
 
-    public static Grafo cargarDesdeArchivo(String rutaArchivo, double pesoMalvinas, SistemaRegiones sistema) {
+    public static Grafo cargarDesdeArchivo(String rutaArchivo, SistemaRegiones sistema) {
         Grafo grafo = new Grafo(24); 
         Gson gson = new Gson();
 

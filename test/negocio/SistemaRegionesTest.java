@@ -9,8 +9,6 @@ public class SistemaRegionesTest {
     @Test(expected = IllegalArgumentException.class)
     public void fronteraConBucleTest() {
         SistemaRegiones sistema = new SistemaRegiones(); 
-        
-        // Intentamos conectar la provincia 1 con la provincia 1
         sistema.registrarFrontera(1, 1, 10);
     }
 

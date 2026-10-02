@@ -25,9 +25,7 @@ public class Grafo {
         A[i][j] = true;
         A[j][i] = true;
         pesos[i][j] = peso;
-        pesos[j][i] = peso;
-        
-        
+        pesos[j][i] = peso;        
     }
 
     public void eliminarArista(int i, int j) {
