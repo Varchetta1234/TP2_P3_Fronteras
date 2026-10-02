@@ -28,22 +28,6 @@ public class VentanaPrincipal extends JFrame {
     private SistemaRegiones sistema;
     private JMapViewer mapViewer;
 
-    // Clase auxiliar para dibujar solo texto sin el punto rojo en el mapa
-    class MarcadorTexto extends MapMarkerDot {
-        public MarcadorTexto(Coordinate coord, String text) {
-            super(null, text, coord);
-        }
-        @Override
-        public void paint(Graphics g, Point position, int radio) {
-            if (g != null && position != null) {
-                g.setColor(Color.BLACK);
-                // Aumentamos el tamaño a 16 para que se vea más grande y grueso
-                g.setFont(new Font("Arial", Font.BOLD, 16)); 
-                g.drawString(getName(), position.x, position.y);
-            }
-        }
-    }
-
     public VentanaPrincipal(SistemaRegiones sistema) {
         this.sistema = sistema;
         
@@ -272,16 +256,23 @@ public class VentanaPrincipal extends JFrame {
         mapViewer.setDisplayPosition(new Coordinate(-43.0, -64.0), 4);
     }
     
+    //funcion para engañar a JMapViewer y que dibuje en el tamanio que se nos antoje el texto de Malvinas!
     private MapMarkerDot crearMarcadorProvincia(Provincia p, Color colorFondo) {
-        String etiqueta = p.getNombre().equalsIgnoreCase("Islas Malvinas") ? "Las Malvinas son Argentinas!!!" : "";
         
-        MapMarkerDot marcador = new MapMarkerDot(etiqueta, new Coordinate(p.getLat(), p.getLon())) {
+        String textoReal = p.getNombre().equalsIgnoreCase("Islas Malvinas") ? "Las Malvinas son argentinas" : "";
+        
+        MapMarkerDot marcador = new MapMarkerDot("", new Coordinate(p.getLat(), p.getLon())) {
             @Override
             public void paint(Graphics g, Point position, int radio) {
-                if (g != null) {
-                    g.setFont(new Font("Arial", Font.BOLD, 20)); 
-                }
                 super.paint(g, position, radio);
+                
+                if (g != null && !textoReal.isEmpty()) {
+                    g.setColor(Color.BLACK);
+                    
+                    g.setFont(new Font("Arial", Font.BOLD, 18)); 
+                    
+                    g.drawString(textoReal, position.x + 5, position.y + 5); 
+                }
             }
         };
         marcador.setBackColor(colorFondo);
