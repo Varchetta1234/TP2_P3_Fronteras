@@ -24,6 +24,7 @@
 	    { "id": 21, "nombre": "Tierra del Fuego", "lat": -54.5000, "lon": -67.3000 },
 	    { "id": 22, "nombre": "Tucuman", "lat": -27.0000, "lon": -65.5000 },
 	    { "id": 23, "nombre": "Islas Malvinas", "lat": -51.7000, "lon": -59.0000 }
+		//Tierra del Fuego e Islas Malvinas con fronteras maritimas
   ],
   
   "fronteras": [

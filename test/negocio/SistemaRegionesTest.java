@@ -26,7 +26,7 @@ public class SistemaRegionesTest {
 
     @Test
     public void integracionGenerarRegionesTest() {
-        SistemaRegiones sistema = new SistemaRegiones();
+        SistemaRegiones sistema = new SistemaRegiones(4);
         
         // Creamos una línea recta: 0 - 1 - 2 - 3
         sistema.registrarFrontera(0, 1, 10);
@@ -43,6 +43,6 @@ public class SistemaRegionesTest {
         for (List<Integer> region : regiones) {
             totalProvincias += region.size();
         }
-        assertEquals(24, totalProvincias);
+        assertEquals(4, totalProvincias);
     }
 }

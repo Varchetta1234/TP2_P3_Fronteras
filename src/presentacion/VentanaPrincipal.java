@@ -161,10 +161,28 @@ public class VentanaPrincipal extends JFrame {
             }
         });
 
-        // Evento Calcular
+     // Evento Calcular
         btnCalcular.addActionListener(e -> {
             try {
+                // PRIMERA VALIDACIÓN: ¿El grafo es conexo?
+                if (!sistema.esGrafoConexo()) {
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                        "El mapa debe estar completamente conectado (grafo conexo) para poder calcular las regiones. Por favor, agregue las fronteras faltantes.", 
+                        "Mapa Incompleto", JOptionPane.WARNING_MESSAGE);
+                    return; // Cortamos la ejecucion aca
+                }
+
                 int k = Integer.parseInt(textFieldK.getText()); 
+                
+                // SEGUNDA VALIDACIÓN: K debe ser valido
+                if (k <= 0 || k > sistema.cantidadProvincias()) {
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                        "Por favor, ingrese un número de regiones válido (entre 1 y " + sistema.cantidadProvincias() + ").", 
+                        "K Inválido", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                // Si pasa las validaciones, calculamos normalmente:
                 List<List<Integer>> regiones = VentanaPrincipal.this.sistema.generarRegiones(k);
                 
                 DefaultTableModel tm = (DefaultTableModel) table.getModel();
@@ -177,6 +195,9 @@ public class VentanaPrincipal extends JFrame {
                     tm.addRow(new String[] { String.valueOf(i + 1), provs.toString() });
                 }
                 actualizarMapa(regiones, true);
+            } catch(NumberFormatException ex) {
+                JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                    "Por favor, ingrese un número válido en el campo K.", "Error", JOptionPane.ERROR_MESSAGE);
             } catch(Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(VentanaPrincipal.this, 

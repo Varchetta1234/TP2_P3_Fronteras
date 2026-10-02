@@ -4,6 +4,7 @@ import negocio.grafos.Grafo;
 import negocio.grafos.Provincia;
 import negocio.grafos.CargadorDeDatos; 
 import negocio.algoritmos.EliminaAristas;
+import negocio.algoritmos.BFS;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class SistemaRegiones {
     private Grafo grafo;
     private Grafo grafoResultante;
     private Map<Integer, Provincia> mapaProvincias;
+    public static final int CANTIDADPROVINCIAS = 24;//Constante magica
 
     public SistemaRegiones() {
         this.mapaProvincias = new HashMap<>(); 
@@ -20,7 +22,18 @@ public class SistemaRegiones {
             this.grafo = CargadorDeDatos.cargarDesdeArchivo("provincias.json", this); 
         } catch (Exception e) {
             e.printStackTrace();
-            this.grafo = new Grafo(24);
+            this.grafo = new Grafo(CANTIDADPROVINCIAS);
+        }
+    }
+    
+    // Constructor exclusivo para Testing (No carga el JSON)
+    public SistemaRegiones(int cantidadProvinciasPrueba) {
+        this.mapaProvincias = new HashMap<>();
+        this.grafo = new Grafo(cantidadProvinciasPrueba);
+        
+        // Creamos provincias ficticias para evitar NullPointerException en los tests
+        for (int i = 0; i < cantidadProvinciasPrueba; i++) {
+            this.agregarProvincia(i, "Prov. " + i, 0, 0);
         }
     }
 
@@ -34,7 +47,10 @@ public class SistemaRegiones {
     
     
     public int cantidadProvincias() {
-        return (this.grafo != null) ? this.grafo.tamano() : 24;
+        if (this.grafo != null) {
+            return this.grafo.tamano();
+        }
+        return CANTIDADPROVINCIAS;
     }
 
     
@@ -66,7 +82,7 @@ public class SistemaRegiones {
     }
 
     public void reiniciarAristas() {
-        this.grafo = new Grafo(24);
+        this.grafo = new Grafo(CANTIDADPROVINCIAS);
     }
 
     public void recargarDesdeJSON() {
@@ -75,5 +91,12 @@ public class SistemaRegiones {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }    
+ 
+     //lo usaremos para verificar manualmente que se ingresa un grafo conexo
+     public boolean esGrafoConexo() {
+         if (this.grafo == null) 
+        	 return false;
+         return BFS.esConexo(this.grafo);
+     }    
 }
