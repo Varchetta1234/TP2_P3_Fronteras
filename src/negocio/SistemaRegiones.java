@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public class SistemaRegiones {
+    
     private Grafo grafo;
-    private Grafo grafoResultante; // Para guardar el arbol despues de Prim
+    private Grafo grafoResultante;
     private Map<Integer, Provincia> mapaProvincias;
 
     public SistemaRegiones() {
@@ -30,6 +31,23 @@ public class SistemaRegiones {
     public void registrarFrontera(int id1, int id2, int similaridad) {
         grafo.agregarArista(id1, id2, similaridad);
     }
+    
+    
+    public int cantidadProvincias() {
+        return (this.grafo != null) ? this.grafo.tamano() : 24;
+    }
+
+    
+    public boolean existeFrontera(int i, int j) {
+        if (this.grafo == null) return false;
+        return this.grafo.existeArista(i, j);
+    }
+
+    
+    public boolean existeFronteraResultante(int i, int j) {
+        if (this.grafoResultante == null) return false;
+        return this.grafoResultante.existeArista(i, j);
+    }
 
     public List<List<Integer>> generarRegiones(int k) {
         if (k <= 0 || k > grafo.tamano()) {
@@ -47,22 +65,10 @@ public class SistemaRegiones {
         return mapaProvincias.get(id);
     }
 
-    
-    public Grafo getGrafo() {
-        return this.grafo;
-    }
-
-    
-    public Grafo getGrafoResultante() {
-        return this.grafoResultante;
-    }
-    
-    
     public void reiniciarAristas() {
         this.grafo = new Grafo(24);
     }
 
-    
     public void recargarDesdeJSON() {
         try {
             this.grafo = CargadorDeDatos.cargarDesdeArchivo("provincias.json", this); 

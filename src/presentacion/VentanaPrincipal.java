@@ -1,7 +1,6 @@
 package presentacion;
 
 import negocio.SistemaRegiones;
-import negocio.grafos.Grafo;
 import negocio.grafos.Provincia;
 
 import javax.swing.*;
@@ -128,13 +127,13 @@ public class VentanaPrincipal extends JFrame {
         rdbtnJson.addActionListener(e -> {
             toggleManual.run();
             sistema.recargarDesdeJSON();
-            actualizarMapa(null, sistema.getGrafo());
+            actualizarMapa(null, false);
         });
 
         rdbtnManual.addActionListener(e -> {
             toggleManual.run();
             sistema.reiniciarAristas();
-            actualizarMapa(null, sistema.getGrafo());
+            actualizarMapa(null, false);
         });
 
         // Evento Agregar Arista Manual
@@ -155,7 +154,7 @@ public class VentanaPrincipal extends JFrame {
                 }
 
                 sistema.registrarFrontera(origen, destino, peso);
-                actualizarMapa(null, sistema.getGrafo());
+                actualizarMapa(null, false);
                 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Por favor, ingrese un número entero válido en el campo de peso.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -177,7 +176,7 @@ public class VentanaPrincipal extends JFrame {
                     }
                     tm.addRow(new String[] { String.valueOf(i + 1), provs.toString() });
                 }
-                actualizarMapa(regiones, VentanaPrincipal.this.sistema.getGrafoResultante());
+                actualizarMapa(regiones, true);
             } catch(Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(VentanaPrincipal.this, 
@@ -204,10 +203,10 @@ public class VentanaPrincipal extends JFrame {
         
         contentPane.add(mapViewer);
 
-        actualizarMapa(null, sistema.getGrafo());
+        actualizarMapa(null, false);
     }
 
-    private void actualizarMapa(List<List<Integer>> regiones, Grafo grafoAdibujar) {
+    private void actualizarMapa(List<List<Integer>> regiones, boolean mostrarRegiones) {
         mapViewer.removeAllMapMarkers();
         mapViewer.removeAllMapPolygons(); 
         
@@ -233,22 +232,27 @@ public class VentanaPrincipal extends JFrame {
             }
         }
         
-        // Dibujar Aristas
-        if (grafoAdibujar != null) {
-            for (int i = 0; i < grafoAdibujar.tamano(); i++) {
-                for (int j = i + 1; j < grafoAdibujar.tamano(); j++) {
-                    if (grafoAdibujar.existeArista(i, j)) {
-                        Provincia p1 = sistema.obtenerProvincia(i);
-                        Provincia p2 = sistema.obtenerProvincia(j);
+     // Dibujar Aristas
+        int cantProvincias = sistema.cantidadProvincias(); // Le preguntamos al sistema
+        
+        for (int i = 0; i < cantProvincias; i++) {
+            for (int j = i + 1; j < cantProvincias; j++) {
+                
+                boolean hayConexion = mostrarRegiones ? 
+                                      sistema.existeFronteraResultante(i, j) : 
+                                      sistema.existeFrontera(i, j);
+
+                if (hayConexion) {
+                    Provincia p1 = sistema.obtenerProvincia(i);
+                    Provincia p2 = sistema.obtenerProvincia(j);
+                    
+                    if (p1 != null && p2 != null) {
+                        Coordinate c1 = new Coordinate(p1.getLat(), p1.getLon());
+                        Coordinate c2 = new Coordinate(p2.getLat(), p2.getLon());
                         
-                        if (p1 != null && p2 != null) {
-                            Coordinate c1 = new Coordinate(p1.getLat(), p1.getLon());
-                            Coordinate c2 = new Coordinate(p2.getLat(), p2.getLon());
-                            
-                            MapPolygonImpl linea = new MapPolygonImpl(Arrays.asList(c1, c2, c1));
-                            linea.setColor(regiones == null ? Color.GRAY : Color.BLACK);
-                            mapViewer.addMapPolygon(linea);
-                        }
+                        MapPolygonImpl linea = new MapPolygonImpl(Arrays.asList(c1, c2, c1));
+                        linea.setColor(regiones == null ? Color.GRAY : Color.BLACK);
+                        mapViewer.addMapPolygon(linea);
                     }
                 }
             }

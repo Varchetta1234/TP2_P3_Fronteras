@@ -3,7 +3,7 @@ package negocio.grafos;
 import java.util.HashSet;
 import java.util.Set;
 
-//Mismo grafo que trabajado en clase pero con pesos
+//Mismo grafo que el trabajado en clase pero con pesos
 public class Grafo {
     private boolean[][] A;
     private int[][] pesos;
