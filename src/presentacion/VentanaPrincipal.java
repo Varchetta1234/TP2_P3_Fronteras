@@ -254,8 +254,7 @@ public class VentanaPrincipal extends JFrame {
         }
         
      // Dibujar Aristas
-        int cantProvincias = sistema.cantidadProvincias(); // Le preguntamos al sistema
-        
+        int cantProvincias = sistema.cantidadProvincias();         
         for (int i = 0; i < cantProvincias; i++) {
             for (int j = i + 1; j < cantProvincias; j++) {
                 

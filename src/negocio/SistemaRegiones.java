@@ -14,7 +14,7 @@ public class SistemaRegiones {
     private Grafo grafo;
     private Grafo grafoResultante;
     private Map<Integer, Provincia> mapaProvincias;
-    public static final int CANTIDADPROVINCIAS = 24;//Constante magica
+    public static final int CANTIDAD_PROVINCIAS = 24;//Constante magica
 
     public SistemaRegiones() {
         this.mapaProvincias = new HashMap<>(); 
@@ -22,7 +22,7 @@ public class SistemaRegiones {
             this.grafo = CargadorDeDatos.cargarDesdeArchivo("provincias.json", this); 
         } catch (Exception e) {
             e.printStackTrace();
-            this.grafo = new Grafo(CANTIDADPROVINCIAS);
+            this.grafo = new Grafo(CANTIDAD_PROVINCIAS);
         }
     }
     
@@ -50,7 +50,7 @@ public class SistemaRegiones {
         if (this.grafo != null) {
             return this.grafo.tamano();
         }
-        return CANTIDADPROVINCIAS;
+        return CANTIDAD_PROVINCIAS;
     }
 
     
@@ -82,7 +82,7 @@ public class SistemaRegiones {
     }
 
     public void reiniciarAristas() {
-        this.grafo = new Grafo(CANTIDADPROVINCIAS);
+        this.grafo = new Grafo(CANTIDAD_PROVINCIAS);
     }
 
     public void recargarDesdeJSON() {

@@ -38,7 +38,6 @@ public class SistemaRegionesTest {
         
         assertEquals(2, regiones.size());
         
-        // Verificamos que no haya perdido ninguna provincia en el proceso: dudoso a continuacion
         int totalProvincias = 0;
         for (List<Integer> region : regiones) {
             totalProvincias += region.size();
